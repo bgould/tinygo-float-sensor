@@ -29,6 +29,7 @@ func main() {
 	readPin.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
 
 	configureBLE()
+	// advertise(interval)
 
 	for lastValue := false; ; {
 		value := readPin.Get()
@@ -44,21 +45,20 @@ func main() {
 		}
 		advertise(interval)
 		time.Sleep(interval)
-		bluetooth.DefaultAdapter.DefaultAdvertisement().Stop()
+		stopAdvertisement()
 	}
 
 }
 
 func configureBLE() {
-	println("starting")
 	must("enable BLE stack", adapter.Enable())
 }
 
 func advertise(interval time.Duration) {
 	adv := adapter.DefaultAdvertisement()
 	must("config adv", adv.Configure(bluetooth.AdvertisementOptions{
-		LocalName: "Sump Sensor",
-		Interval:  bluetooth.NewDuration(interval),
+		LocalName: localName,
+		Interval:  btHomeAdvInterval,
 		ServiceData: []bluetooth.ServiceDataElement{
 			{UUID: btHomeServiceUUID, Data: btHomeServiceData},
 		},
@@ -66,8 +66,14 @@ func advertise(interval time.Duration) {
 	must("start adv", adv.Start())
 }
 
+func stopAdvertisement() {
+	must("stop adv", bluetooth.DefaultAdapter.DefaultAdvertisement().Stop())
+}
+
 func must(action string, err error) {
 	if err != nil {
 		panic("failed to " + action + ": " + err.Error())
+	} else {
+		// println(time.Now().String(), action+" successful")
 	}
 }

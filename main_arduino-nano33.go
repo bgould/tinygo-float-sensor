@@ -6,5 +6,6 @@ import "machine"
 
 const (
 	readPin machine.Pin = machine.D3
-	ledPin  machine.Pin = machine.LED
+
+	ledPin machine.Pin = machine.LED
 )
