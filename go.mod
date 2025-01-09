@@ -2,7 +2,10 @@ module github.com/bgould/tinygo-float-sensor
 
 go 1.23.4
 
-require tinygo.org/x/bluetooth v0.10.1-0.20250105094942-376e2b9b1d4e
+require (
+	tinygo.org/x/bluetooth v0.10.1-0.20250105094942-376e2b9b1d4e
+	tinygo.org/x/drivers v0.29.0
+)
 
 require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
@@ -16,5 +19,4 @@ require (
 	github.com/tinygo-org/pio v0.0.0-20231216154340-cd888eb58899 // indirect
 	golang.org/x/exp v0.0.0-20230728194245-b0cb94b80691 // indirect
 	golang.org/x/sys v0.11.0 // indirect
-	tinygo.org/x/drivers v0.29.0 // indirect
 )

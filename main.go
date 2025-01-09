@@ -13,8 +13,9 @@ const (
 	tempReadInterval = 5 * time.Second
 	localName        = "Sump Sensor"
 
-	binarySensorIdx = 2
-	tempSensorIdx   = 4
+	binarySensorIdx1 = 2
+	binarySensorIdx2 = 4
+	tempSensorIdx    = 6
 )
 
 var (
@@ -22,10 +23,13 @@ var (
 
 	btHomeAdvInterval = bluetooth.NewDuration(interval)
 	btHomeServiceUUID = bluetooth.New16BitUUID(0xFCD2)
-	btHomeServiceData = []byte{0x40, 0x20, 0x01, 0x45, 0x00, 0x00}
+	btHomeServiceData = []byte{0x40, 0x20, 0x01, 0x20, 0x01, 0x45, 0x00, 0x00}
 
 	errTemperatureNotSupported = errors.New("temperature not supported")
 	errTemperatureNotAvailable = errors.New("temperature not available")
+
+	floatSensor1 = &FloatSensor{readPin1}
+	floatSensor2 = &FloatSensor{readPin2}
 )
 
 func main() {
@@ -33,8 +37,8 @@ func main() {
 	// time.Sleep(time.Second)
 	// println("starting")
 
-	ledPin.Configure(machine.PinConfig{Mode: machine.PinOutput})
-	readPin.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
+	floatSensor1.Configure()
+	floatSensor2.Configure()
 
 	configureBLE()
 
@@ -45,19 +49,33 @@ func main() {
 		temperatureSupported = true
 	}
 
-	for lastValue, lastTemp, lastTempRead := false, int32(0), time.Unix(0, 0); ; {
+	var lastValue1, lastValue2 bool
+	for lastTemp, lastTempRead := int32(0), time.Unix(0, 0); ; {
 
-		// read float sensor value
-		value := readPin.Get()
-		if value != lastValue {
-			println("pin value:", value)
+		// float sensor 1
+		value1 := floatSensor1.Get()
+		if value1 != lastValue1 {
+			println("float sensor 1:", value1)
 		}
-		ledPin.Set(value)
-		lastValue = value
-		if value {
-			btHomeServiceData[binarySensorIdx] = 1
+		ledPin.Set(value1)
+		lastValue1 = value1
+		if value1 {
+			btHomeServiceData[binarySensorIdx1] = 1
 		} else {
-			btHomeServiceData[binarySensorIdx] = 0
+			btHomeServiceData[binarySensorIdx1] = 0
+		}
+
+		// float sensor 2
+		value2 := floatSensor2.Get()
+		if value2 != lastValue2 {
+			println("float sensor 2:", value2)
+		}
+		// ledPin.Set(value2)
+		lastValue2 = value2
+		if value2 {
+			btHomeServiceData[binarySensorIdx2] = 1
+		} else {
+			btHomeServiceData[binarySensorIdx2] = 0
 		}
 
 		// read temperature sensor value
@@ -86,6 +104,18 @@ func main() {
 		stopAdvertisement()
 	}
 
+}
+
+type FloatSensor struct {
+	gpio machine.Pin
+}
+
+func (s *FloatSensor) Configure() {
+	s.gpio.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
+}
+
+func (s *FloatSensor) Get() bool {
+	return s.gpio.Get()
 }
 
 func configureBLE() {

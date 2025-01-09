@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	readPin machine.Pin = machine.D3
-	ledPin  machine.Pin = machine.LED
+	readPin1 machine.Pin = machine.D3
+	readPin2 machine.Pin = machine.D3
+	ledPin   machine.Pin = machine.LED
 )
 
 var (

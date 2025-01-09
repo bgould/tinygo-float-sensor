@@ -15,8 +15,6 @@ github.com/saltosystems/winrt-go v0.0.0-20240509164145-4f7860a3bd2b/go.mod h1:CI
 github.com/sirupsen/logrus v1.5.0/go.mod h1:+F7Ogzej0PZc/94MaYx/nvG9jOFMD2osvC3s+Squfpo=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=
-github.com/soypat/cyw43439 v0.0.0-20240627234239-a62ee4027d66 h1:v9LzTgHI/JJsm5HjPJgd0rywfifMo56B3wihSz3jQAs=
-github.com/soypat/cyw43439 v0.0.0-20240627234239-a62ee4027d66/go.mod h1:1Otjk6PRhfzfcVHeWMEeku/VntFqWghUwuSQyivb2vE=
 github.com/soypat/cyw43439 v0.0.0-20241116210509-ae1ce0e084c5 h1:arwJFX1x5zq+wUp5ADGgudhMQEXKNMQOmTh+yYgkwzw=
 github.com/soypat/cyw43439 v0.0.0-20241116210509-ae1ce0e084c5/go.mod h1:1Otjk6PRhfzfcVHeWMEeku/VntFqWghUwuSQyivb2vE=
 github.com/soypat/seqs v0.0.0-20240527012110-1201bab640ef h1:phH95I9wANjTYw6bSYLZDQfNvao+HqYDom8owbNa0P4=
@@ -41,18 +39,7 @@ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
-tinygo.org/x/bluetooth v0.10.0/go.mod h1:t/Vm2a/rslsBoqFQKCBsWQw/cmRicQq+8Tl3tj5RCRI=
-tinygo.org/x/bluetooth v0.10.1-0.20250102144502-85e230585a61 h1:TdtjLdyTgLLXAaj4tHNYeFXKpk4AyFtr/8f75Uop5yc=
-tinygo.org/x/bluetooth v0.10.1-0.20250102144502-85e230585a61/go.mod h1:3Y2CxjIoTwtNzbhE6nBxRkdCZkCgLeSVBv3Vo/JTVbA=
-tinygo.org/x/bluetooth v0.10.1-0.20250104152844-78869b049d23 h1:twtUj105N4Xv1aW67fHPFNyumqUSX5OXShFElMvce7c=
-tinygo.org/x/bluetooth v0.10.1-0.20250104152844-78869b049d23/go.mod h1:XLRopLvxWmIbofpZSXc7BGGCpgFOV5lrZ1i/DQN0BCw=
-tinygo.org/x/bluetooth v0.10.1-0.20250104200836-85dac3b18c71 h1:t6qeQmpvEwMiYlorKRUTpC4/UvzNQ2uBiuyRZ6IUYuQ=
-tinygo.org/x/bluetooth v0.10.1-0.20250104200836-85dac3b18c71/go.mod h1:XLRopLvxWmIbofpZSXc7BGGCpgFOV5lrZ1i/DQN0BCw=
 tinygo.org/x/bluetooth v0.10.1-0.20250105094942-376e2b9b1d4e h1:fKrEnVnARQNMahyYWmkhwm/SL6LbuLBFMvWxuPtG6mA=
 tinygo.org/x/bluetooth v0.10.1-0.20250105094942-376e2b9b1d4e/go.mod h1:XLRopLvxWmIbofpZSXc7BGGCpgFOV5lrZ1i/DQN0BCw=
-tinygo.org/x/drivers v0.28.0 h1:ROVrGGXddmpn2+oV/Bu3LceYbtPCJckmgIqvPcN/L0k=
-tinygo.org/x/drivers v0.28.0/go.mod h1:T6snsUqS0RAxOANxiV81fQwLxDDNmprxTAYzmxoA7J0=
-tinygo.org/x/drivers v0.28.1-0.20241028090715-76a4276b5dea h1:1ORaETzQPC3iCAda5TW35HiqbSji3JPu8cKZBfyG7P8=
-tinygo.org/x/drivers v0.28.1-0.20241028090715-76a4276b5dea/go.mod h1:q/mU8G/wz821p8xXqbkBACOlmZFDHXd//DnYnCW+dDQ=
 tinygo.org/x/drivers v0.29.0 h1:xHuq8Fr1D/D2+1V/3d+aXufqP81/CLi1itdVbrYgrE0=
 tinygo.org/x/drivers v0.29.0/go.mod h1:q/mU8G/wz821p8xXqbkBACOlmZFDHXd//DnYnCW+dDQ=
