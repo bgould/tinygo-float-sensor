@@ -28,8 +28,8 @@ var (
 	errTemperatureNotSupported = errors.New("temperature not supported")
 	errTemperatureNotAvailable = errors.New("temperature not available")
 
-	floatSensor1 = &FloatSensor{readPin1}
-	floatSensor2 = &FloatSensor{readPin2}
+	floatSensor1 = NewFloatSensor(readPin1)
+	floatSensor2 = NewFloatSensor(readPin2)
 )
 
 func main() {
@@ -106,18 +106,6 @@ func main() {
 
 }
 
-type FloatSensor struct {
-	gpio machine.Pin
-}
-
-func (s *FloatSensor) Configure() {
-	s.gpio.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
-}
-
-func (s *FloatSensor) Get() bool {
-	return s.gpio.Get()
-}
-
 func configureBLE() {
 	must("enable BLE stack", adapter.Enable())
 }
@@ -145,4 +133,21 @@ func must(action string, err error) {
 	} else {
 		// println(time.Now().String(), action+" successful")
 	}
+}
+
+type FloatSensor struct {
+	gpio machine.Pin
+	last bool
+}
+
+func NewFloatSensor(pin machine.Pin) *FloatSensor {
+	return &FloatSensor{gpio: pin}
+}
+
+func (s *FloatSensor) Configure() {
+	s.gpio.Configure(machine.PinConfig{Mode: machine.PinInputPullup})
+}
+
+func (s *FloatSensor) Get() bool {
+	return s.gpio.Get()
 }

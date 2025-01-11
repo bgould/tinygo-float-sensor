@@ -10,7 +10,7 @@ import (
 
 const (
 	readPin1 machine.Pin = machine.D3
-	readPin2 machine.Pin = machine.D3
+	readPin2 machine.Pin = machine.D5
 	ledPin   machine.Pin = machine.LED
 )
 
