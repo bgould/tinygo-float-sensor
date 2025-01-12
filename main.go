@@ -38,43 +38,38 @@ func init() {
 
 func main() {
 
-	var lastValue1, lastValue2 bool
-	for lastTemp, lastTempRead := int32(0), time.Unix(0, 0); ; {
+	for lastTempRead := time.Unix(0, 0); ; {
 
 		// float sensor 1
 		value1 := floatSensor1.Get()
-		if value1 != lastValue1 {
+		if value1 != bthome.GetBool(BTHomeDataBinarySensor1) {
 			println("float sensor 1:", value1)
 		}
-		machine.LED.Set(value1)
 		bthome.SetBool(BTHomeDataBinarySensor1, value1)
-		lastValue1 = value1
 
 		// float sensor 2
 		value2 := floatSensor2.Get()
-		if value2 != lastValue2 {
+		if value2 != bthome.GetBool(BTHomeDataBinarySensor2) {
 			println("float sensor 2:", value2)
 		}
-		// ledPin.Set(value2)
 		bthome.SetBool(BTHomeDataBinarySensor2, value2)
-		lastValue2 = value2
+
+		// set LED to match the first float sensor state
+		machine.LED.Set(value1)
 
 		// read temperature sensor value
 		if time.Since(lastTempRead) > tempReadInterval {
 			lastTempRead = time.Now()
-			if milliDegreesC, err := tempSensor.ReadTemperature(); err != nil {
-				if lastTemp != 0 {
+			lastTemp := bthome.GetSignedInt16(BTHomeDataTemperature)
+			currTemp, err := tempSensor.ReadTemperature()
+			if currTemp != lastTemp {
+				if err != nil {
 					println("error reading temperature", err.Error())
+				} else {
+					println("Degrees C", float32(currTemp)/10, "\n\n")
 				}
-				lastTemp = 0
-				bthome.SetSignedInt16(BTHomeDataTemperature, 0)
-			} else {
-				if lastTemp != milliDegreesC {
-					println("Degrees C", float32(milliDegreesC)/1000, "\n\n")
-				}
-				lastTemp = milliDegreesC
-				bthome.SetSignedInt16(BTHomeDataTemperature, int16(milliDegreesC/100))
 			}
+			bthome.SetSignedInt16(BTHomeDataTemperature, currTemp)
 		}
 
 		// advertise values
@@ -99,10 +94,15 @@ func (t *TemperatureSensor) Configure() error {
 	return err
 }
 
-// ReadTemperature returns the temperature in celsius milli degrees (°C/1000)
-func (t *TemperatureSensor) ReadTemperature() (temp int32, err error) {
+// ReadTemperature returns the temperature in celsius deci degrees (°C/10)
+func (t *TemperatureSensor) ReadTemperature() (temp int16, err error) {
 	x, err := t.accel.ReadTemperature()
-	return x, err
+	if err != nil {
+		x = 0
+	} else {
+		x /= 100
+	}
+	return int16(x), err
 }
 
 type FloatSensor struct {
@@ -146,6 +146,10 @@ func NewBTHome(interval time.Duration, localName string) *BTHome {
 	}
 }
 
+func (bt *BTHome) GetBool(index BTHomeData) bool {
+	return bt.svcdata[index] != 0
+}
+
 func (bt *BTHome) SetBool(index BTHomeData, val bool) {
 	if val {
 		bt.svcdata[index] = 1
@@ -157,6 +161,10 @@ func (bt *BTHome) SetBool(index BTHomeData, val bool) {
 func (bt *BTHome) SetSignedInt16(index BTHomeData, val int16) {
 	bt.svcdata[index+0] = byte(val >> 0)
 	bt.svcdata[index+1] = byte(val >> 8)
+}
+
+func (bt *BTHome) GetSignedInt16(index BTHomeData) int16 {
+	return int16(bt.svcdata[index]) | (int16(bt.svcdata[index+1]) << 8)
 }
 
 func (bt *BTHome) Configure() error {
