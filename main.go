@@ -31,6 +31,8 @@ func init() {
 	tempSensor.Configure()
 	floatSensor1.Configure()
 	floatSensor2.Configure()
+
+	bluetooth.DefaultAdapter.Enable()
 	bthome.Configure()
 }
 
@@ -76,7 +78,7 @@ func main() {
 		}
 
 		// advertise values
-		bthome.Advertise(interval)
+		bthome.StartAdvertisement()
 		time.Sleep(interval)
 		bthome.StopAdvertisement()
 
@@ -121,7 +123,6 @@ func (s *FloatSensor) Get() bool {
 }
 
 type BTHome struct {
-	adapter  *bluetooth.Adapter
 	interval bluetooth.Duration
 	svcuuid  bluetooth.UUID
 	svcdata  []byte
@@ -138,7 +139,6 @@ const (
 
 func NewBTHome(interval time.Duration, localName string) *BTHome {
 	return &BTHome{
-		adapter:  bluetooth.DefaultAdapter,
 		interval: bluetooth.Duration(interval),
 		svcuuid:  bluetooth.New16BitUUID(0xFCD2),
 		svcdata:  []byte{0x40, 0x20, 0x01, 0x20, 0x01, 0x45, 0x00, 0x00},
@@ -160,21 +160,17 @@ func (bt *BTHome) SetSignedInt16(index BTHomeData, val int16) {
 }
 
 func (bt *BTHome) Configure() error {
-	return bt.adapter.Enable()
-}
-
-func (bt *BTHome) Advertise(interval time.Duration) error {
-	adv := bt.adapter.DefaultAdvertisement()
 	opts := bluetooth.AdvertisementOptions{
 		AdvertisementType: bluetooth.AdvertisingTypeScanInd,
 		Interval:          bt.interval,
 		LocalName:         bt.localnm,
 		ServiceData:       []bluetooth.ServiceDataElement{{UUID: bt.svcuuid, Data: bt.svcdata}},
 	}
-	if err := adv.Configure(opts); err != nil {
-		return err
-	}
-	return adv.Start()
+	return bluetooth.DefaultAdapter.DefaultAdvertisement().Configure(opts)
+}
+
+func (bt *BTHome) StartAdvertisement() error {
+	return bluetooth.DefaultAdapter.DefaultAdvertisement().Start()
 }
 
 func (bt *BTHome) StopAdvertisement() error {
